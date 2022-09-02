@@ -17,24 +17,24 @@
         const multiply_arrays2 = wasm2.instance.exports.multiply_arrays;
 
 
-        const a = (new Float32Array(100000)).map((d, i) => Math.random() );
-        const b = (new Float32Array(100000)).map((d, i) => Math.random() );
-        const c = (new Float32Array(100000)).map((d, i) => Math.random() );
-        const c2 = (new Float32Array(100000)).map((d, i) => Math.random() );
-        const c3 = (new Float32Array(100000)).map((d, i) => Math.random() );
+        const a = (new Float32Array(1000000)).map((d, i) => Math.floor(Math.random() * 100));
+        const b = (new Float32Array(1000000)).map((d, i) => Math.floor(Math.random() * 100));
+        const c = (new Float32Array(1000000)).map((d, i) => 0 );
+        const c2 = (new Float32Array(1000000)).map((d, i) => 0 );
+        const c3 = (new Float32Array(1000000)).map((d, i) => 0 );
         console.profile('multiply-js');
         console.time('multiply-js');
-        multiply_arrays(c2, a, b);
+        multiplyArray(c, a, b);
         console.timeEnd('multiply-js');
         console.profileEnd('multiply-js');
         console.profile('multiply-simd');
         console.time('multiply-simd');
-        multiply_arrays(c, a, b, 100000);
+        multiply_arrays(c2, a, b, 1000000);
         console.timeEnd('multiply-simd')
         console.profileEnd('multiply-simd');
         console.profile('multiply-wasm');
         console.time('multiply-wasm');
-        multiply_arrays2(c, a, b, 100000);
+        multiply_arrays2(c3, a, b, 1000000);
         console.profileEnd('multiply-wasm');
         console.timeEnd('multiply-wasm');
         
