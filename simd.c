@@ -1,3 +1,4 @@
+// emcc -Os -s STANDALONE_WASM -s EXPORTED_FUNCTIONS="['_multiply_arrays']" -Wl,--no-entry "simd.c" -o "simd.wasm" -msimd128 
 #include <wasm_simd128.h>
 
 void multiply_arrays(int* out, int* in_a, int* in_b, int size) {
