@@ -1,0 +1,45 @@
+<script>
+    // import { simd } from 'wasm-feature-detect';
+    function multiplyArray(c, a, b) {
+        for (let i = 0; i < a.length; i++) {
+            c[i] = a[i] * b [i] * a[i];
+        }
+    }
+    (async () => {
+        const response = await fetch('./simd.wasm');
+        const file = await response.arrayBuffer();
+        const wasm = await WebAssembly.instantiate(file);
+        const { multiply_arrays } = wasm.instance.exports;
+
+        const response2 = await fetch('./mult.wasm');
+        const file2 = await response2.arrayBuffer();
+        const wasm2 = await WebAssembly.instantiate(file2);
+        const multiply_arrays2 = wasm2.instance.exports.multiply_arrays;
+
+
+        const a = (new Float32Array(100000)).map((d, i) => Math.random() );
+        const b = (new Float32Array(100000)).map((d, i) => Math.random() );
+        const c = (new Float32Array(100000)).map((d, i) => Math.random() );
+        const c2 = (new Float32Array(100000)).map((d, i) => Math.random() );
+        const c3 = (new Float32Array(100000)).map((d, i) => Math.random() );
+        console.profile('multiply-js');
+        console.time('multiply-js');
+        multiply_arrays(c2, a, b);
+        console.timeEnd('multiply-js');
+        console.profileEnd('multiply-js');
+        console.profile('multiply-simd');
+        console.time('multiply-simd');
+        multiply_arrays(c, a, b, 100000);
+        console.timeEnd('multiply-simd')
+        console.profileEnd('multiply-simd');
+        console.profile('multiply-wasm');
+        console.time('multiply-wasm');
+        multiply_arrays2(c, a, b, 100000);
+        console.profileEnd('multiply-wasm');
+        console.timeEnd('multiply-wasm');
+        
+
+        // console.log(c);
+//   const myArray = new Int32Array(memory.buffer, 0, 1000);
+})();
+</script>
